@@ -4,9 +4,6 @@ const bodyParser = require('body-parser');
 const app = express();
 app.use(bodyParser.urlencoded({extended: true}));
 
-// require in our Mongoose Model
-const Book = require('./modules/models/book.schema.js');
-
 // Connect to Mongoose DB
 const mongoose = require('mongoose');
 
@@ -25,7 +22,9 @@ mongoose.connection.on('error', (error)=>{
 
 // add static files later ...
 
-// add router later...
+// add router
+const bookRouter = require('./routers/book.router');
+app.use('/book', bookRouter);
 
 
 const PORT = process.env.PORT || 5000;
