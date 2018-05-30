@@ -21,11 +21,37 @@ router.get('/', ( req, res ) => {
 
 router.post('/', (req, res) => {
     let bookData = req.body;
-    console.log( 'got the book data from request:', bookData)
+    console.log( 'got the book data from request:', bookData.title )
     let newBook = new Book(bookData);
     console.log('new book is:', newBook)
-    newBook.save();
-    res.sendStatus(201);
-})
+    newBook.save()
+    .then(() =>{
+        res.sendStatus(201);
+    })
+    .catch((error) => {
+        console.log('error adding book:', error );
+        res.sendStatus(500);
+    });
+});
+
+
+router.delete('/', (req, res) =>{
+    // delete does not use data, so we'll use params instead
+    // data is req.body
+    // params is req.query
+    let bookId = req.query._id;
+    Book.findByIdAndRemove(req.query._id)
+        .then( () => {
+            //good servers respond.  say ok.
+            console.log(`removed book ${bookId}`)
+            res.sendStatus(200);
+        })
+        .catch( () => {
+            //bad stuff happened.  good servers still send errors.
+            console.log( 'Error removing book:', error );
+            res.sendStatus(500);
+        });
+});
+
 
 module.exports = router;
