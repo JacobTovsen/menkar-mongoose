@@ -53,5 +53,19 @@ router.delete('/', (req, res) =>{
         });
 });
 
+router.put('/', (req, res)=>{
+    let bookData = req.body;
+    // PUT can send data, so getting id from req.body
+    Book.findByIdAndUpdate(bookData._id, bookData)
+        .then(()=>{
+            console.log(`updated book with id ${bookData.id}`);
+            res.sendStatus(200);
+        })
+        .catch( (error)=> {
+            console.log(`error updating book with id ${bookData._id}: ${error}`);
+            res.sendStatus(500);
+        });
+});
+
 
 module.exports = router;
